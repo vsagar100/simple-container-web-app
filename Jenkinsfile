@@ -35,7 +35,7 @@ pipeline
 			steps{
 				script{
 					sh 'scp Dockerfile dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
-					sh 'scp -i target/simple-container-web-app-1.0.0.war dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
+					sh 'scp target/simple-container-web-app-1.0.0.war dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
 				}//script
 			}//steps sh
 		}//copy artifacts to docker
