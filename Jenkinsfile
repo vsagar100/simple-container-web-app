@@ -47,10 +47,10 @@ pipeline
 					def dockerRun= "whoami && \
 							docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
 							docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
-					sshagent(credentials: ['dockeruser']) {
+				//	sshagent(credentials: ['dockeruser']) {
 						// some block
 						sh "ssh -o strictHostKeyChecking=no dockeruser@ludck00la.centralindia.cloudapp.azure.com '${dockerRun}'"
-					}//sshagent
+				//	}//sshagent
 				
 			//sshPublisher(publishers: [sshPublisherDesc(configName: 'ludck00la.centralindia.cloudapp.azure.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '${dockerRun}', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
