@@ -33,9 +33,9 @@ pipeline
 		}//copy artifacts to docker
 		stage('Build & Run Docker Image')
 		{
-			def dockerRun= "whoami && \"
-						   "docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \"
-						   "docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
+			def dockerRun= "whoami && \
+				       docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
+					docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
 			sshagent(credentials: ['dockeruser']) {
 				// some block
 				sh "ssh -o strictHostKeyChecking=no dockeruser@ludck00la.centralindia.cloudapp.azure.com '${dockerRun}'"
