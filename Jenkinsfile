@@ -25,34 +25,40 @@ pipeline
 		stage('Build')
 		{
 			steps{
-				sh "mvn clean package sonar:sonar -Dsonar.login=ccff898f9b726fe1ae2e72d22639788cc680018c"
+				script{
+					sh "mvn clean package sonar:sonar -Dsonar.login=ccff898f9b726fe1ae2e72d22639788cc680018c"
+				}//script
 			}//steps sh
 		}//stage build	
 		stage('Copy Artifacts to Docker')
 		{
 			steps{
-				sh 'scp -i Dockerfile dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
-				sh 'scp -i target/simple-container-web-app-1.0.0.war dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
+				script{
+					sh 'scp -i Dockerfile dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
+					sh 'scp -i target/simple-container-web-app-1.0.0.war dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
+				}//script
 			}//steps sh
 		}//copy artifacts to docker
 		
 		stage('Build & Run Docker Image')
 		{
 			steps{
-				def dockerRun= "whoami && \
-						docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
-						docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
-				sshagent(credentials: ['dockeruser']) {
-					// some block
-					sh "ssh -o strictHostKeyChecking=no dockeruser@ludck00la.centralindia.cloudapp.azure.com '${dockerRun}'"
-				}//sshagent
-			
+				script{
+					def dockerRun= "whoami && \
+							docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
+							docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
+					sshagent(credentials: ['dockeruser']) {
+						// some block
+						sh "ssh -o strictHostKeyChecking=no dockeruser@ludck00la.centralindia.cloudapp.azure.com '${dockerRun}'"
+					}//sshagent
+				
 			//sshPublisher(publishers: [sshPublisherDesc(configName: 'ludck00la.centralindia.cloudapp.azure.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '${dockerRun}', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 
 			
 			
 			//sh "docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
 			//docker run -itd --rm -p 5000:8080 --entrypoint=/bin/bash tomcat:9-jre11
+				}//script
 			}//steps def docker
 		}//stage Docker
 		
