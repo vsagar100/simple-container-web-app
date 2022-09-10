@@ -1,5 +1,4 @@
-FROM scratch
-FROM ubuntu:16.04
+FROM tomcat:9-jre11
 RUN mkdir /opt/java8
 RUN mkdir /opt/tomcat8
 ENV JAVA_HOME /opt/java8
