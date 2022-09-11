@@ -1,11 +1,8 @@
-FROM tomcat:9-jre11
-RUN mkdir /opt/java8
-RUN mkdir /opt/tomcat8
-ENV JAVA_HOME /opt/java8
-ENV CATALINA_HOME /opt/tomcat8
-ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/bin
-ADD jdk1.8.0_112 /opt/java8
-ADD apache-tomcat-8.0.38 /opt/tomcat8
-ADD target/simple-container-web-app-1.0.0.war /opt/tomcat8/webapps
+FROM tomcat:latest
+RUN mv webapps webapps2
+RUN mv webapps.dist/ webapps
+COPY target/simple-container-web-app-1.0.0.war webapps/
+COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
+COPY context.xml /usr/local/tomcat/webapps/manager/META-INF/context.xml
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
