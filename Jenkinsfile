@@ -49,7 +49,7 @@ pipeline
 					def dockerRun= "whoami && \
 							docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
 							docker run -dit -p 8585:8080 --name=mytomcat vsagar100/simple-container-web-app && \
-							docker cp /home/azureuser/code/simple-container-web-app/target/simple-container-web-app-1.0.0 mytomcat:/usr/local/tomcat/webapps/"
+							docker cp -r /home/azureuser/code/simple-container-web-app/target/simple-container-web-app-1.0.0 mytomcat:/usr/local/tomcat/webapps/"
 				//	sshagent(credentials: ['dockeruser']) {
 						// some block
 					sh "ssh -o strictHostKeyChecking=no dockeruser@'${DOCKER_DNS}' '${dockerRun}'"
