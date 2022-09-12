@@ -37,7 +37,7 @@ pipeline
 				script{
 					sh 'scp Dockerfile dockeruser@"${DOCKER_DNS}":~'
 					sh 'scp target/simple-container-web-app-1.0.0.war dockeruser@"${DOCKER_DNS}":~'
-					sh 'scp target/simple-container-web-app-1.0.0 mytomcat dockeruser@"${DOCKER_DNS}":~'
+					sh 'scp target/simple-container-web-app-1.0.0 dockeruser@"${DOCKER_DNS}":~'
 				}//script
 			}//steps sh
 		}//copy artifacts to docker
