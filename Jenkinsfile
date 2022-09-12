@@ -11,9 +11,10 @@ pipeline
 	}//tools
 	environment{
 		GIT_CRED_ID = 'git_cred_simple_web_app' //credentials('git_simple_web_app_user')
-        gitRepoUrl = "https://github.com/vsagar100/simple-container-web-app.git"
-        gitBranch = "main"
-        ARTI_SERVER_ID= "JFrog-artifactory"
+		gitRepoUrl = "https://github.com/vsagar100/simple-container-web-app.git"
+		gitBranch = "main"
+		ARTI_SERVER_ID= "JFrog-artifactory"
+		DOCKER_DNS = "ludck00la.centralindia.cloudapp.azure.com"
 	}//environment
 	stages{
 		stage('Git Clone')
@@ -34,8 +35,9 @@ pipeline
 		{
 			steps{
 				script{
-					sh 'scp Dockerfile dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
-					sh 'scp target/simple-container-web-app-1.0.0.war dockeruser@ludck00la.centralindia.cloudapp.azure.com:~'
+					sh 'scp Dockerfile dockeruser@"${DOCKER_DNS}":~'
+					sh 'scp target/simple-container-web-app-1.0.0.war dockeruser@"${DOCKER_DNS}":~'
+					sh 'scp target/simple-container-web-app-1.0.0 mytomcat dockeruser@"${DOCKER_DNS}":~'
 				}//script
 			}//steps sh
 		}//copy artifacts to docker
@@ -46,10 +48,11 @@ pipeline
 				script{
 					def dockerRun= "whoami && \
 							docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
-							docker run -dit -p 5001:8080 --entrypoint=/bin/bash  vsagar100/simple-container-web-app"
+							docker run -dit -p 8585:8080 --name=mytomcat vsagar100/simple-container-web-app && \
+							docker cp /home/azureuser/code/simple-container-web-app/target/simple-container-web-app-1.0.0 mytomcat:/usr/local/tomcat/webapps/"
 				//	sshagent(credentials: ['dockeruser']) {
 						// some block
-						sh "ssh -o strictHostKeyChecking=no dockeruser@ludck00la.centralindia.cloudapp.azure.com '${dockerRun}'"
+					sh "ssh -o strictHostKeyChecking=no dockeruser@'${DOCKER_DNS}' '${dockerRun}'"
 				//	}//sshagent
 				
 			//sshPublisher(publishers: [sshPublisherDesc(configName: 'ludck00la.centralindia.cloudapp.azure.com', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '${dockerRun}', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
