@@ -35,7 +35,7 @@ pipeline
 		{
 			steps{
 				script{
-					sh 'scp Dockerfile dockeruser@"${DOCKER_DNS}":~'
+					sh 'scp Dockerfile dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
 					sh 'scp target/simple-container-web-app-1.0.0.war dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
 					sh 'scp -r target/simple-container-web-app-1.0.0 dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
 				}//script
@@ -47,6 +47,7 @@ pipeline
 			steps{
 				script{
 					def dockerRun= "whoami && \
+							cd /home/azureuser/code/simple-container-web-app && \
 							docker build . -f Dockerfile -t vsagar100/simple-container-web-app && \
 							docker run -dit -p 8585:8080 --name=mytomcat vsagar100/simple-container-web-app && \
 							docker cp -r /home/azureuser/code/simple-container-web-app/target/simple-container-web-app-1.0.0 mytomcat:/usr/local/tomcat/webapps/"
