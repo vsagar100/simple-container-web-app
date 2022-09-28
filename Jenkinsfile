@@ -25,7 +25,8 @@ pipeline
 		{
 			steps{
 				script{
-					sh "mvn clean package sonar:sonar -Dsonar.login=ccff898f9b726fe1ae2e72d22639788cc680018c"
+					sh "mvn clean package"
+					//sh "mvn clean package sonar:sonar -Dsonar.login=ccff898f9b726fe1ae2e72d22639788cc680018c"
 				}//script
 			}//steps sh
 		}//stage build	
