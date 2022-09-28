@@ -1,8 +1,6 @@
 pipeline
 {
-	agent{
-		label 'maven-build-server'
-	}//agent	
+	agent any	
 	options{
 		buildDiscarder logRotator(numToKeepStr: '10')
 	}//options
