@@ -34,9 +34,9 @@ pipeline
 		{
 			steps{
 				script{
-					sh 'scp Dockerfile dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
-					sh 'scp target/simple-container-web-app-1.0.0.war dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
-					sh 'scp -r target/simple-container-web-app-1.0.0 dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
+					sh 'scp -o strictHostKeyChecking=no Dockerfile dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
+					sh 'scp -o strictHostKeyChecking=no target/simple-container-web-app-1.0.0.war dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
+					sh 'scp -o strictHostKeyChecking=no -r target/simple-container-web-app-1.0.0 dockeruser@"${DOCKER_DNS}":/home/azureuser/code/simple-container-web-app'
 				}//script
 			}//steps sh
 		}//copy artifacts to docker
